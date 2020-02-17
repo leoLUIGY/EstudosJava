@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.glorhala.world.Camera;
+import com.glorhala.world.World;
 import com.glorhalla.main.Game;
 
 public class BulletShoot extends Entity {
@@ -18,17 +19,26 @@ public class BulletShoot extends Entity {
 		super(x, y, width, height, sprite);
 		this.dx = dx;
 		this.dy = dy;
-		if(curLife == life) {
-			Game.bullets.remove(this);
-			return;
-		}
+		
 		// TODO Auto-generated constructor stub
 	}
 
 	 
 	 public void tick() {
+		 if(World.isFreeDynamic((int)(x+(dx*spd)), (int)(y+(dy*spd)), 3, 3)) {
 		 x+=dx * spd;
 		 y+=dy * spd;
+		 curLife++;
+		 } else {
+			 Game.bullets.remove(this);
+			 World.generateParticle(100, (int)x, (int)y);
+				return;
+		 }
+		 if(curLife == life) {
+				Game.bullets.remove(this);
+				return;
+			}
+		
 	 }
 	 public void render(Graphics g) {
 		 g.setColor(Color.YELLOW);

@@ -49,13 +49,14 @@ public class Menu {
 			}
 		}
 		if (enter) {
+			Sound.music.loop();
 			enter = false;
-			if(options[currentOption] == "novo Jogo" || options[currentOption] == "continuar") {
+			if(options[currentOption] == "novo Jogo" ) {
 				Game.gamestate = "NORMAL";
 				pause = false;
 				file = new File("save.txt");
 				file.delete();
-			}else if(options[currentOption] == "continuar") {
+			}else if(options[currentOption] == "carregar") {
 				file = new File("save.txt");
 				if(file.exists()) {
 					String saver = loadGame(10);
@@ -94,6 +95,7 @@ public class Menu {
 					while((singleLine = reader.readLine()) != null) {
 						String[] trans = singleLine.split(":");
 						char[] val = trans[1].toCharArray();
+						trans[1] = "";
 						for(int i = 0; i < val.length; i++) {
 							val[i] -= encode;
 							trans[i]+=val[i];

@@ -12,7 +12,7 @@ public class Player extends Entity{
 	public boolean right , up, left, down;
 	public int right_dir = 0, left_dir = 1;
 	public int dir = right_dir;
-	public double speed  = 1.4;
+	public double speed  = 2;
 	
 	private int frames  = 0, maxFrames = 5, index = 0, maxIndex = 3;
 	private boolean moved = false;
@@ -59,8 +59,27 @@ public class Player extends Entity{
 	public void setY(int y) {
 		this.y = y;
 	}
+	
+	public void revealMap() {
+		int xx= (int)(x/16);
+		int yy = (int)(y/16);
+		World.tiles[xx-1+yy*World.WIDTH].show = true;
+		World.tiles[xx+yy*World.WIDTH].show = true;
+		World.tiles[xx+1+yy*World.WIDTH].show = true;
+		World.tiles[xx+((yy-1)*World.WIDTH)].show = true;
+		
+		World.tiles[xx+((yy+1)*World.WIDTH)].show = true;
+		
+		World.tiles[xx+1+((yy-1)*World.WIDTH)].show = true;
+		World.tiles[xx-1+((yy-1)*World.WIDTH)].show = true;
+		World.tiles[xx+1+((yy+1)*World.WIDTH)].show = true;
+		World.tiles[xx-1+((yy+1)*World.WIDTH)].show = true;
+	
+	}
 	public void tick() {
 		
+		revealMap();
+		depth = 1;
 		if(jump) {
 			if(isJumping == false) {
 				jump = false;
@@ -179,6 +198,10 @@ public class Player extends Entity{
 		if(life <= 0) {
 			Game.gamestate = "GAME_OVER";
 		}
+		updateCamera();
+	}
+	
+	public void updateCamera() {
 		Camera.x =  Camera.clamp(this.getX() - (Game.WIDTH/2), 0, World.WIDTH*16 - Game.WIDTH);
 		Camera.y =  Camera.clamp(this.getY() - (Game.HEIGHT/2), 0, World.HEIGHT*16 - Game.HEIGHT);
 		
